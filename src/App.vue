@@ -287,7 +287,22 @@ export default {
       // });
     },
     addMetafield: function(){
-      this.selectedOptions.push(`metafields.${this.metafieldToAdd.namespace}.${this.metafieldToAdd.key}:${this.metafieldToAdd.type}`);
+      const metafield = `metafields.${this.metafieldToAdd.namespace}.${this.metafieldToAdd.key}:${this.metafieldToAdd.type}`;
+      
+      if (this.selectedOptions.indexOf(metafield) < 0 && this.metafieldToAdd.namespace.length > 0 && this.metafieldToAdd.key.length > 0) {
+        this.selectedOptions.push(metafield);
+
+        this.metafieldToAdd.namespace = "";
+        this.metafieldToAdd.key = "";
+        this.metafieldToAdd.type = "string";
+  
+        this.updateOptions();
+  
+        this.updateUrl(this.urlValue, true);
+      }
+    },
+    removeMetafield: function(metafield){
+      this.selectedOptions.splice(this.selectedOptions.indexOf(metafield), 1);
 
       this.updateOptions();
 
