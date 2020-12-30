@@ -277,13 +277,67 @@ export default {
 }
 </script>
 
-<style>
+<style lang="scss">
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
+  padding: 60px 24px;
+
+  .Polaris-Layout {
+    max-width: 850px;
+    margin: 0 auto;
+  }
+
+  .Polaris-FormLayout {
+    margin-left: 0;
+  }
+
+  .Polaris-FormLayout__Item {
+    margin-left: 0;
+    max-width: 100%;
+  }
+
+  .Polaris-Layout__Section {
+    flex: 2 2 100%;
+  }
+
+  .Polaris-Layout__Section--secondary {
+    max-width: calc(50% - 2rem);
+    min-width: 340px;
+  }
+
+  .Polaris-ChoiceList {
+    text-align: left;
+  }
+
+  .Polaris-Labelled + .Polaris-Labelled {
+    margin-top: 1.6rem;
+  }
+
+  .Polaris-Button {
+    margin-top: 1.6rem;
+  }
+
+  .Polaris-Labelled + div {
+    .Polaris-FormLayout__Item {
+      margin-left: 0;
+    }
+  }
+
+  .Polaris-Card__Header.secondary{
+    padding-top: 3rem;
+  }
+
+  .Polaris-Subheading {
+    margin-top: 2rem;
+  }
+
+  ul,
+  ol {
+    text-align: left;
+  }
 }
 </style>
