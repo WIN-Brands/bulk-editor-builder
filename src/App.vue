@@ -190,6 +190,26 @@ export default {
       let parsed = [];
       
       return parsed;
+    },
+    metafields: function() {
+      return this.urlElements.filter((item) => item.indexOf(":") > -1 && item.indexOf("metafields") > -1 )
+    },
+    sortedBulkEditorOptions: function() {
+      const sortedOptions = this.bulkEditorOptions;
+
+      return sortedOptions.sort((current, next) => {
+        const currentOption = current.label.toUpperCase(); // ignore upper and lowercase
+        const nextOption = next.label.toUpperCase(); // ignore upper and lowercase
+        if (currentOption < nextOption) {
+          return -1;
+        }
+        if (currentOption > nextOption) {
+          return 1;
+        }
+
+        // names must be equal
+        return 0;
+      });
     }
   },
   methods: {
