@@ -1,11 +1,33 @@
 <template>
   <div id="app">
     <polaris-layout>
-        <polaris-layout-section secondary>
-          <polaris-card title="Tags" sectioned>
+      <polaris-card>
+        <polaris-card-section>
+          <polaris-display-text element="h1" size="extraLarge">
+              Bulk Editor Link Builder
+          </polaris-display-text>
+          <p>Version 1.0</p>
+          <p style="text-align: left;"></p>
+
+          <polaris-subheading>
+              How to use:
+          </polaris-subheading>
+          <ol>
+            <li>Get your <polaris-link url="https://help.shopify.com/en/manual/shopify-admin/productivity-tools/bulk-editing-products">Bulk Editor link from your store</polaris-link></li>
+            <li>Paste it below into the URL field</li>
+            <li>Select your options</li>
+            <li>Add/remove your metafields</li>
+            <li>Copy the updated link in the URL field and paste it into your browser</li>
+            <li>Enjoy!</li>
+          </ol>
+        </polaris-card-section>
+      </polaris-card>
+
+        <polaris-layout-section>
+          <polaris-card title="Bulk Editor Link" sectioned>
             <polaris-form-layout>
                 <polaris-text-field 
-                    label="Bulk Editor Link"
+                    label="URL"
                     :value="urlValue"
                     @change="updateUrl"
                     multiline>
@@ -13,62 +35,77 @@
             </polaris-form-layout>
           </polaris-card>
         </polaris-layout-section>
-        <polaris-layout-section>
-            <polaris-card title="Add Options" sectioned>
-              <polaris-text-field 
-                  label="Store Admin URL"
-                  :value="storeRoot">
-              </polaris-text-field>
-              <polaris-text-field 
-                  label="Product IDs"
-                  :value="ids.join(', ')"
-                  @change="updateIds">
-              </polaris-text-field>
-              <polaris-form-layout-group>
-                <polaris-choice-list 
-                    name="Bulk Editor Options"
-                    title="Bulk Editor Options"
-                    :choices="bulkEditorOptions"
-                    :allow-multiple="true"
-                    @change="updateOptions"
-                    v-model="selectedOptions">
-                </polaris-choice-list>
-                <template v-for="element in urlElements">
-                  <param-option :paramData="element" :key="element"></param-option>
-                </template>
-              </polaris-form-layout-group>
+        <polaris-layout-section secondary>
+            <polaris-card title="Editor Options" sectioned>
+              <polaris-card-section title="URL Options">
+                <polaris-text-field 
+                    label="Store Admin URL"
+                    :value="storeRoot">
+                </polaris-text-field>
+                <polaris-text-field 
+                    label="Product IDs"
+                    :value="ids.join(', ')"
+                    @change="updateIds">
+                </polaris-text-field>
+              </polaris-card-section>
+              <polaris-card-section title="Fields">
+                <polaris-form-layout-group>
+                  <polaris-choice-list 
+                      name="Bulk Editor Fields"
+                      title=""
+                      :choices="sortedBulkEditorOptions"
+                      :allow-multiple="true"
+                      @change="updateOptions"
+                      v-model="selectedOptions">
+                  </polaris-choice-list>
+                </polaris-form-layout-group>
+              </polaris-card-section>
 
             </polaris-card>
         </polaris-layout-section>
-        <polaris-layout-section>
-            <polaris-card title="Add Metafields" sectioned>
-              <polaris-form-layout-group>
-                <polaris-text-field 
-                    label="Metafield Namespace"
-                    :value="metafieldToAdd.namespace"
-                    @change="updateMetafieldToAdd('namespace', $event)">
-                </polaris-text-field>
-                <polaris-text-field 
-                    label="Metafield Key"
-                    :value="metafieldToAdd.key"
-                    @change="updateMetafieldToAdd('key', $event)">
-                </polaris-text-field>
-                <polaris-select
-                    v-model="metafieldToAdd.type"
-                    label="Metafield Type"
-                    :options="[
-                        {label: 'String', value: 'string'},
-                        {label: 'Number', value: 'integer'},
-                        {label: 'JSON', value: 'json_string', disabled: true}
-                    ]"
-                    placeholder="Select Type">
-                </polaris-select>
-              </polaris-form-layout-group>
-              <polaris-button primary @click="addMetafield">
-                  Add Metafield
-              </polaris-button>
+        <polaris-layout-section secondary>
+            <polaris-card title="Metafields" sectioned>
+              <polaris-card-section title="Add Metafields">
+                <polaris-form-layout-group>
+                  <polaris-text-field 
+                      label="Metafield Namespace"
+                      :value="metafieldToAdd.namespace"
+                      @change="updateMetafieldToAdd('namespace', $event)">
+                  </polaris-text-field>
+                  <polaris-text-field 
+                      label="Metafield Key"
+                      :value="metafieldToAdd.key"
+                      @change="updateMetafieldToAdd('key', $event)">
+                  </polaris-text-field>
+                  <polaris-select
+                      v-model="metafieldToAdd.type"
+                      label="Metafield Type"
+                      :options="[
+                          {label: 'String', value: 'string'},
+                          {label: 'Number', value: 'integer'},
+                          {label: 'JSON', value: 'json_string', disabled: true}
+                      ]"
+                      placeholder="Select Type">
+                  </polaris-select>
+                </polaris-form-layout-group>
+                
+                <polaris-button primary @click="addMetafield">
+                    Add Metafield
+                </polaris-button>
+              </polaris-card-section>
+
+              <polaris-card-section title="Added Metafields">
+                <div class="Polaris-Card__Header secondary" v-if="metafields.length > 0"><h2 class="Polaris-Heading">Metafields</h2></div>
+                <template v-for="element in metafields">
+                  <param-option :paramData="element" :removeFxn="removeMetafield" :key="element"></param-option>
+                </template>
+              </polaris-card-section>
             </polaris-card>
         </polaris-layout-section>
+        <polaris-footer-help>
+          <p>Find us on <polaris-link url="https://github.com/WIN-Brands/bulk-editor-builder">Github</polaris-link></p>
+          Made by <polaris-link url="https://winbg.com">WIN Brands Group</polaris-link>
+        </polaris-footer-help>
     </polaris-layout>
   </div>
 </template>
