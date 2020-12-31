@@ -1,5 +1,8 @@
 module.exports = {
   css: {
-    sourceMap: true
+    sourceMap: true,
+    publicPath: process.env.NODE_ENV === 'production'
+      ? '/bulk-editor-builder/'
+      : '/'
   }
 }
